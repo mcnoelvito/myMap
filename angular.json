@@ -22,8 +22,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "src/assets",
-                "output": "assets"
+                "input": "node_modules/@arcgis/core/assets",
+                "output": "/assets/"
               },
               {
                 "glob": "**/*.svg",
@@ -80,7 +80,7 @@
               "buildTarget": "app:build:development"
             },
             "ci": {
-              "progress": false
+
             }
           },
           "defaultConfiguration": "development"
@@ -136,7 +136,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": "a618d5c3-a456-4abb-afd3-235400ce3f13"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {
