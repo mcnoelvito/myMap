@@ -6,7 +6,9 @@ import Graphic from '@arcgis/core/Graphic';
 import Point from '@arcgis/core/geometry/Point'; // Impor Point
 import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol'; // Impor PictureMarkerSymbol
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
-import ImageryLayer from '@arcgis/core/layers/ImageryLayer'
+import ImageryLayer from '@arcgis/core/layers/ImageryLayer';
+import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
+import TileLayer from "@arcgis/core/layers/TileLayer";
 
 
 @Component({
@@ -29,6 +31,19 @@ export class HomePage {
       container: "container",
       map: map,
       zoom: 8
+    });
+
+    const basemapGallery = new BasemapGallery({
+      view: this.mapView, // Set the view to the widget
+      source: {
+        portal: {
+          url: "https://www.arcgis.com", // ArcGIS portal URL
+          useVectorBasemaps: true  // Use vector basemaps
+        }
+      }
+    });
+    this.mapView.ui.add(basemapGallery, {
+      position: "top-right"
     });
 
     let weatherServiceFL = new ImageryLayer({ url: WeatherServiceUrl });
