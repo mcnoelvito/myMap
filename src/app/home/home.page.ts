@@ -63,7 +63,7 @@ export class HomePage {
     }
   }
 }
-const WeatherServiceUrl = "https://mapservices.weather.noaa.gov/eventdriven/rest/services/radar/radar_base_reflectivity_time/ImageServer'";
+const WeatherServiceUrl ='https://mapservices.weather.noaa.gov/eventdriven/rest/services/radar/radar_base_reflectivity_time/ImageServer';
 
   // Fungsi untuk mendapatkan lokasi pengguna atau menggunakan lokasi default UGM
   // private async getCurrentPosition(): Promise<{ latitude: number; longitude: number }> {
