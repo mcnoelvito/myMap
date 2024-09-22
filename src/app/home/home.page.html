@@ -1,65 +1,15 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      ArcGIS Ionic Vito Simple Map
-    </ion-title>
+    <ion-title>ArcGIS Ionic Vito Simple Map</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Vito's Map</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+  <ion-button (click)="toggleGallery()" class="toggle-button">
+    {{ isGalleryVisible ? '-' : 'Show Gallery' }}
+  </ion-button>
 
-  <!-- Div container for the ArcGIS Map -->
-  <div id="container" style="height: 100%; width: 100%;"></div>
+  <div id="container" style="height: 100%;"></div>
 
-  <!-- Include the ArcGIS JavaScript API -->
-  <script src="https://js.arcgis.com/4.25/"></script>
-  <link rel="stylesheet" href="https://js.arcgis.com/4.25/esri/themes/light/main.css">
-
-  <script>
-    require([
-      "esri/Map",
-      "esri/views/MapView",
-      "esri/layers/TileLayer",
-      "esri/layers/FeatureLayer",
-      "esri/layers/MapImageLayer"
-    ], function (Map, MapView, TileLayer, FeatureLayer, MapImageLayer) {
-
-      // Initialize the map
-      var map = new Map({
-        basemap: "topo-vector" // Basemap type
-      });
-
-      // Create the map view
-      var view = new MapView({
-        container: "container", // Div element ID where the map will render
-        map: map,
-        zoom: 4, // Zoom level
-        center: [106.8, -6.2] // Center on Indonesia (longitude, latitude)
-      });
-
-      // Add TileLayer (Street Map)
-      var tileLayer = new TileLayer({
-        url: "https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer"
-      });
-      map.add(tileLayer);
-
-      // Add FeatureLayer (for dynamic features, e.g. cities or points)
-      var featureLayer = new FeatureLayer({
-        url: "https://services.arcgis.com/example/arcgis/rest/services/your-layer/FeatureServer/0"
-      });
-      map.add(featureLayer);
-
-      // Add MapImageLayer (layer with multiple images/tiles)
-      var mapImageLayer = new MapImageLayer({
-        url: "https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer"
-      });
-      map.add(mapImageLayer);
-
-    });
-  </script>
+  
 </ion-content>

@@ -1,27 +1,48 @@
 #container {
-  text-align: center;
-  height: 100%;
   width: 100%;
+  height: 50vh; /* Atur tinggi sesuai keinginan */
+}
+
+.toggle-button {
   position: absolute;
-  left: 0;
-  right: 0;
-  
+  top: 10px;
+  right: 10px;
+  z-index: 1000;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+
+.basemap-gallery {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  z-index: 10;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+.gallery.minimized {
+  transform: translateX(290px);
+}
 
-  color: #8c8c8c;
+.basemap-item {
+  padding: 5px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
 
+.basemap-item p {
   margin: 0;
 }
 
-#container a {
-  text-decoration: none;
+.basemap-item:hover {
+  background-color: #f0f0f0;
+}
+.gallery {
+  display: none; /* Sembunyikan galeri secara default */
+}
+
+.gallery.active {
+  display: block; /* Tampilkan galeri ketika aktif */
 }

@@ -3,24 +3,51 @@ import { Geolocation } from '@capacitor/geolocation';
 import Map from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
 import Graphic from '@arcgis/core/Graphic';
-import Point from '@arcgis/core/geometry/Point'; // Impor Point
-import PictureMarkerSymbol from '@arcgis/core/symbols/PictureMarkerSymbol'; // Impor PictureMarkerSymbol
+import Point from '@arcgis/core/geometry/Point';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/SimpleMarkerSymbol';
 import ImageryLayer from '@arcgis/core/layers/ImageryLayer';
-import BasemapGallery from "@arcgis/core/widgets/BasemapGallery";
-import TileLayer from "@arcgis/core/layers/TileLayer";
-
+import BasemapGallery from '@arcgis/core/widgets/BasemapGallery';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
   mapView: MapView | any;
-  userLocationGraphic : Graphic | any;
+  userLocationGraphic: Graphic | any;
+  isGalleryVisible = false;
+  basemapGallery: BasemapGallery | any; // Simpan referensi widget basemap gallery
 
-  constructor () {}
+  constructor() {}
+
+  toggleGallery() {
+    this.isGalleryVisible = !this.isGalleryVisible;
+
+    // Jika galeri terlihat, tambahkan widget BasemapGallery
+    if (this.isGalleryVisible) {
+      this.basemapGallery = new BasemapGallery({
+        view: this.mapView,
+        source: {
+          portal: {
+            url: "https://www.arcgis.com",
+            useVectorBasemaps: true
+          }
+        }
+      });
+
+      this.mapView.ui.add(this.basemapGallery, {
+        position: "top-right"
+      });
+
+    // Jika galeri tidak terlihat, hapus widget BasemapGallery
+    } else {
+      if (this.basemapGallery) {
+        this.mapView.ui.remove(this.basemapGallery);
+      }
+    }
+  }
+
 
   async ngOnInit() {
     const map = new Map({
@@ -33,18 +60,7 @@ export class HomePage {
       zoom: 8
     });
 
-    const basemapGallery = new BasemapGallery({
-      view: this.mapView, // Set the view to the widget
-      source: {
-        portal: {
-          url: "https://www.arcgis.com", // ArcGIS portal URL
-          useVectorBasemaps: true  // Use vector basemaps
-        }
-      }
-    });
-    this.mapView.ui.add(basemapGallery, {
-      position: "top-right"
-    });
+
 
     let weatherServiceFL = new ImageryLayer({ url: WeatherServiceUrl });
     map.add(weatherServiceFL);
@@ -53,6 +69,7 @@ export class HomePage {
     this.mapView.center = this.userLocationGraphic.geometry as Point;
     setInterval(this.updateUserLocationOnMap.bind(this), 10000);
   }
+
   async getLocationService(): Promise<number[]> {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition((resp) => {
@@ -68,64 +85,12 @@ export class HomePage {
       this.userLocationGraphic.geometry = geom;
     } else {
       this.userLocationGraphic = new Graphic({
-          symbol: new SimpleMarkerSymbol(),
-          geometry: geom,
+        symbol: new SimpleMarkerSymbol(),
+        geometry: geom,
       });
       this.mapView.graphics.add(this.userLocationGraphic);
     }
   }
 }
 
-const WeatherServiceUrl =
-  'https://mapservices.weather.noaa.gov/eventdriven/rest/services/radar/radar_base_reflectivity_time/ImageServer'
-  //constructor() {}
-
-  // private latitude: number | any;
-  // private longitude: number | any;
-
-
-  // public async ngOnInit() {
-  //   try {
-  //     const position = await Geolocation.getCurrentPosition();
-  //     this.latitude = position.coords.latitude;
-  //     this.longitude = position.coords.longitude;
-
-  //     console.log('Latitude:', this.latitude);
-  //     console.log('Longitude:', this.longitude);
-
-  //     // Buat instance peta
-  //     const map = new Map({
-  //       basemap: "topo-vector"
-  //     });
-
-  //     const view = new MapView({
-  //       container: "container",
-  //       map: map,
-  //       zoom: 14, // Adjust zoom level as needed
-  //       center: [this.longitude, this.latitude] // Longitude, Latitude
-  //     });
-
-  //     // Gunakan class Point dari ArcGIS API
-  //     const point = new Point({
-  //       longitude: this.longitude,
-  //       latitude: this.latitude
-  //     });
-
-  //     // Definisikan PictureMarkerSymbol dengan gambar rumah
-  //     const markerSymbol = new PictureMarkerSymbol({
-  //       url: 'assets/download.png', // Path relatif ke gambar
-  //       width: '32px', // Lebar simbol
-  //       height: '32px' // Tinggi simbol
-  //     });
-
-  //     const pointGraphic = new Graphic({
-  //       geometry: point,  // Menggunakan class Point sebagai geometri
-  //       symbol: markerSymbol
-  //     });
-
-  //     // Tambahkan marker ke peta
-  //     view.graphics.add(pointGraphic);
-  //   } catch (error) {
-  //     console.error("Error getting location or adding marker:", error);
-  //   }
-  // }
+const WeatherServiceUrl = 'https://mapservices.weather.noaa.gov/eventdriven/rest/services/radar/radar_base_reflectivity_time/ImageServer';
